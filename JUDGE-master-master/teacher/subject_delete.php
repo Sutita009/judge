@@ -1,11 +1,5 @@
 <?php
-/*
- * Codejudge
- * NANTIPAT TULLWATTANA SOFTWARE ENGINEER
- * Licensed under MIT License.
- *
- * The main page that lists all the problem
- */
+
 require_once('../functions.php');
 if(!loggedin())
   header("Location: login.php");
@@ -13,9 +7,8 @@ else
   include('header.php');
 
 ?>
-<li><a href="index.php">Subject</a></li>
-<li class="active"><a href="subject_Container.php">subject_Container</a></li>
-<li><a href="account.php">Account</a></li>
+
+<li><a href="subject.php">Subject</a></li>
 <li><a href="logout.php">Logout</a></li>
 </ul>
 </div><!--/.nav-collapse -->
@@ -24,19 +17,19 @@ else
 </div>
 
 <div class="container">
-  <form action="event_Container.php" method="post" name='form1'>
+  <form action="subject_Container.php" method="post" name='form1'>
   <br><br><br><br>
     <div class="tile is-parent">
       <article class="tile is-child notification is-info">
         <p class="title">My Subject</p>
-       <a class="button is-primary" onclick='location.replace("subject_add.php")'>Build Subject</a>
+        <p class="title" align="right">
+        <a class="button is-primary"  onclick='location.replace("subject_add.php")'>Enroll Subject</a>
         <table class="table">
           <thead>
             <tr>
 
-
               <th><abbr >Subject No.</abbr></th>
-              <th><abbr >Subject Name</abbr></th>
+              <th><abbr >Subject Name.</abbr></th>
               <th><abbr >Detail</abbr></th>
 
             </tr>
@@ -45,22 +38,22 @@ else
           <tbody>
             <?php
             connectdb();
-            $query = "SELECT subject_id,subject_name FROM subject  WHERE Teacher_id='".$_SESSION['sl']."'";
 
+            $subject_id = $_GET['subject_id'];
+            $query = "DELETE FROM subject WHERE subject_id ='$subject_id' and  Teacher_id='".$_SESSION['sl']."'";
+            $query1 = "SELECT subject_id,subject_name FROM subject  WHERE Teacher_id='".$_SESSION['sl']."'";
             $result = mysql_query($query);
-           /* $fields = mysql_fetch_array($result);
+            $result1 = mysql_query($query1);
+            /*$fields = mysql_fetch_array($result);
             $_SESSION['subject_id'] = $fields['subject_id'];*/
-            while($row = mysql_fetch_array($result,MYSQLI_NUM)) {
+          //  echo $query;
+          while($row = mysql_fetch_array($result1,MYSQLI_NUM)) {
               echo "<tr>";
               echo "<td>".$row[0]."</td>";
               echo "<td>".$row[1]."</td>";
               echo "<td>";
               echo "<div class='control is-grouped'>";
               echo "<p class='control'>";
-
-              //echo "<form method='post' action='event_Container.php'>";
-
-
               echo "<button class='button is-success''>";
               echo "<a href='event_Container.php?subject_id=$row[0]'>";
               echo "Enter</a></td>";
@@ -81,21 +74,14 @@ else
               echo "<button class='button is-danger''>";
               echo "<a href='subject_delete.php?subject_id=$row[0]'>";
               echo "Delete Subject</a></td>";
-
-
-              /*echo "<button class='button is-success' >Enter</button> ";
-              echo "<button class='button is-info'  onClick='JavaScript:fncSubmit('student_list')''>Student List</button> ";
-              echo "<button class='button is-warning' onClick='JavaScript:fncSubmit('subject_Edit')''>Edit Subject</button> ";
-              echo "<button class='button is-danger' onClick='JavaScript:fncSubmit('subject_Container')'>Delete Subject</button>";*/
-
-
               echo "</p>";
               echo "</div>";
               echo "</td>";
               echo "</tr>";
             }
-            ?>
 
+            ?>
+            <Meta http-equiv="refresh"content="1;URL=subject_Container.php">
           </tbody>
         </table>
       </article>
